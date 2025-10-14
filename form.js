@@ -117,11 +117,11 @@
             })
             .then(response => {
                 // Redirect to confirmation page regardless of response
-                window.location.href = 'pages/confirmation.html';
+                window.location.href = "/confirmation";
             })
             .catch(error => {
                 console.log('Submission error:', error);
                 // Still redirect to confirmation page
-                window.location.href = 'pages/confirmation.html';
+                window.location.href = "/confirmation";
             });
         });

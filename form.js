@@ -1,4 +1,4 @@
-  document.addEventListener('DOMContentLoaded', () => {
+   document.addEventListener('DOMContentLoaded', () => {
             const overlay = document.getElementById('intro-overlay');
             const heroSection = document.getElementById('hero');
             
@@ -101,4 +101,27 @@
         const floatingElements = document.querySelectorAll('.float-element');
         floatingElements.forEach((element, index) => {
             element.style.animationDelay = `${index * 0.5}s`;
+        });
+
+        // Handle form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            
+            // Submit to backend
+            fetch('https://wrkacademy-backend-production.up.railway.app/application', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                // Redirect to confirmation page regardless of response
+                window.location.href = 'pages/confirmation.html';
+            })
+            .catch(error => {
+                console.log('Submission error:', error);
+                // Still redirect to confirmation page
+                window.location.href = 'pages/confirmation.html';
+            });
         });

@@ -1,4 +1,4 @@
- document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', () => {
             const overlay = document.getElementById('intro-overlay');
             const heroSection = document.getElementById('hero');
             

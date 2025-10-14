@@ -105,7 +105,7 @@ floatingElements.forEach((element, index) => {
 
 // Enhanced form submission handler
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.querySelector('form');
+    const form = document.getElementById('wrk-application-form') || document.querySelector('form');
     
     if (form) {
         form.addEventListener('submit', function(e) {

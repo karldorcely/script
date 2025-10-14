@@ -1,127 +1,219 @@
-   document.addEventListener('DOMContentLoaded', () => {
-            const overlay = document.getElementById('intro-overlay');
-            const heroSection = document.getElementById('hero');
-            
-            // Ensure overlay is visible initially
-            if (overlay) {
-                console.log('Starting cinematic intro...');
-                
-                // Start intro sequence (faster timing)
-                setTimeout(() => {
-                    overlay.classList.add('signature-blur');
-                    console.log('Phase 1: Signature blur');
-                }, 800);
-                
-                setTimeout(() => {
-                    overlay.classList.add('clones-appear');
-                    console.log('Phase 2: Clones appear');
-                }, 1600);
-                
-                setTimeout(() => {
-                    overlay.classList.add('form-wrk');
-                    console.log('Phase 3: Form WRK letters');
-                }, 2400);
-                
-                setTimeout(() => {
-                    overlay.classList.add('fade-out');
-                    heroSection.classList.add('reveal');
-                    console.log('Phase 4: Fade out to hero');
-                }, 3500);
-                
-                setTimeout(() => {
-                    overlay.style.display = 'none';
-                    console.log('Cinematic complete');
-                }, 4500);
-            } else {
-                console.error('Intro overlay not found!');
-            }
-        });
+document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.getElementById('intro-overlay');
+    const heroSection = document.getElementById('hero');
+    
+    // Ensure overlay is visible initially
+    if (overlay) {
+        console.log('Starting cinematic intro...');
+        
+        // Start intro sequence (faster timing)
+        setTimeout(() => {
+            overlay.classList.add('signature-blur');
+            console.log('Phase 1: Signature blur');
+        }, 800);
+        
+        setTimeout(() => {
+            overlay.classList.add('clones-appear');
+            console.log('Phase 2: Clones appear');
+        }, 1600);
+        
+        setTimeout(() => {
+            overlay.classList.add('form-wrk');
+            console.log('Phase 3: Form WRK letters');
+        }, 2400);
+        
+        setTimeout(() => {
+            overlay.classList.add('fade-out');
+            heroSection.classList.add('reveal');
+            console.log('Phase 4: Fade out to hero');
+        }, 3500);
+        
+        setTimeout(() => {
+            overlay.style.display = 'none';
+            console.log('Cinematic complete');
+        }, 4500);
+    } else {
+        console.error('Intro overlay not found!');
+    }
+});
 
-        // Enhanced smooth scrolling with smooth easing
-        function smoothScrollTo(target, duration = 1000) {
-            const targetPosition = target.offsetTop - 50;
-            const startPosition = window.pageYOffset;
-            const distance = targetPosition - startPosition;
-            let startTime = null;
+// Enhanced smooth scrolling with smooth easing
+function smoothScrollTo(target, duration = 1000) {
+    const targetPosition = target.offsetTop - 50;
+    const startPosition = window.pageYOffset;
+    const distance = targetPosition - startPosition;
+    let startTime = null;
 
-            // Smooth easing function (easeInOutCubic)
-            function easeInOutCubic(t) {
-                return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-            }
+    // Smooth easing function (easeInOutCubic)
+    function easeInOutCubic(t) {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
 
-            function animation(currentTime) {
-                if (startTime === null) startTime = currentTime;
-                const timeElapsed = currentTime - startTime;
-                const progress = Math.min(timeElapsed / duration, 1);
-                const easeProgress = easeInOutCubic(progress);
-                
-                window.scrollTo(0, startPosition + (distance * easeProgress));
-                
-                if (timeElapsed < duration) {
-                    requestAnimationFrame(animation);
-                }
-            }
-
+    function animation(currentTime) {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        const easeProgress = easeInOutCubic(progress);
+        
+        window.scrollTo(0, startPosition + (distance * easeProgress));
+        
+        if (timeElapsed < duration) {
             requestAnimationFrame(animation);
         }
+    }
 
-        // Smooth scroll to form with bounce
-        document.getElementById('joinWaitlistBtn').addEventListener('click', () => {
-            const target = document.getElementById('waitlist');
-            smoothScrollTo(target);
+    requestAnimationFrame(animation);
+}
+
+// Smooth scroll to form with bounce
+document.getElementById('joinWaitlistBtn')?.addEventListener('click', () => {
+    const target = document.getElementById('waitlist');
+    if (target) smoothScrollTo(target);
+});
+
+// Add smooth scrolling to all internal links
+document.addEventListener('DOMContentLoaded', () => {
+    // Create intersection observer for scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
         });
+    }, observerOptions);
 
-        // Add smooth scrolling to all internal links
-        document.addEventListener('DOMContentLoaded', () => {
-            // Create intersection observer for scroll animations
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
+    // Observe all sections for scroll animations (except hero which should be visible immediately)
+    document.querySelectorAll('.content-section:not(#hero)').forEach(section => {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(30px)';
+        section.style.transition = 'all 0.8s cubic-bezier(0.4, 0.0, 0.2, 1)';
+        observer.observe(section);
+    });
+});
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, observerOptions);
+// Floating elements animation
+const floatingElements = document.querySelectorAll('.float-element');
+floatingElements.forEach((element, index) => {
+    element.style.animationDelay = `${index * 0.5}s`;
+});
 
-            // Observe all sections for scroll animations (except hero which should be visible immediately)
-            document.querySelectorAll('.content-section:not(#hero)').forEach(section => {
-                section.style.opacity = '0';
-                section.style.transform = 'translateY(30px)';
-                section.style.transition = 'all 0.8s cubic-bezier(0.4, 0.0, 0.2, 1)';
-                observer.observe(section);
-            });
-        });
-
-        // Floating elements animation
-        const floatingElements = document.querySelectorAll('.float-element');
-        floatingElements.forEach((element, index) => {
-            element.style.animationDelay = `${index * 0.5}s`;
-        });
-
-        // Handle form submission
-        document.querySelector('form').addEventListener('submit', function(e) {
+// Enhanced form submission handler
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('form');
+    
+    if (form) {
+        form.addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            // Show loading state
+            const submitButton = this.querySelector('input[type="submit"]') || this.querySelector('button[type="submit"]');
+            const originalText = submitButton.value || submitButton.textContent;
+            
+            if (submitButton.tagName === 'INPUT') {
+                submitButton.value = 'Submitting...';
+            } else {
+                submitButton.textContent = 'Submitting...';
+            }
+            submitButton.disabled = true;
             
             // Get form data
             const formData = new FormData(this);
             
-            // Submit to backend
+            // Convert FormData to URLSearchParams for proper encoding
+            const urlEncodedData = new URLSearchParams();
+            for (const [key, value] of formData.entries()) {
+                urlEncodedData.append(key, value);
+            }
+            
+            // Submit to backend with proper headers
             fetch('https://wrkacademy-backend-production.up.railway.app/application', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: urlEncodedData.toString()
             })
-            .then(response => {
-                // Redirect to confirmation page regardless of response
+            .then(response => response.json())
+            .then(result => {
+                console.log('Backend response:', result);
+                
+                // Store submission data for confirmation page
+                const submissionData = {
+                    name: formData.get('name') || 'N/A',
+                    email: formData.get('email') || 'N/A',
+                    motivation: formData.get('motivation') || 'N/A',
+                    tier: formData.get('tier') || 'N/A',
+                    description: formData.get('description') || 'N/A',
+                    interest: formData.get('interest') || 'N/A',
+                    submittedAt: new Date().toLocaleString(),
+                    status: result.status || 'success'
+                };
+                
+                localStorage.setItem('wrkSubmission', JSON.stringify(submissionData));
+                
+                // Redirect to confirmation page
                 window.location.href = "/confirmation";
             })
             .catch(error => {
-                console.log('Submission error:', error);
-                // Still redirect to confirmation page
+                console.error('Network error:', error);
+                
+                // Still store basic data and redirect
+                const submissionData = {
+                    name: formData.get('name') || 'N/A',
+                    email: formData.get('email') || 'N/A',
+                    submittedAt: new Date().toLocaleString(),
+                    status: 'submitted'
+                };
+                
+                localStorage.setItem('wrkSubmission', JSON.stringify(submissionData));
+                
+                // Redirect to confirmation page
                 window.location.href = "/confirmation";
+            })
+            .finally(() => {
+                // Restore button state (though user will be redirected)
+                if (submitButton.tagName === 'INPUT') {
+                    submitButton.value = originalText;
+                } else {
+                    submitButton.textContent = originalText;
+                }
+                submitButton.disabled = false;
             });
         });
+    }
+});
+
+// Function to display confirmation data on confirmation page
+if (window.location.pathname.includes('confirmation')) {
+    document.addEventListener('DOMContentLoaded', function() {
+        const submissionData = localStorage.getItem('wrkSubmission');
+        
+        if (submissionData) {
+            const data = JSON.parse(submissionData);
+            
+            // Update confirmation page elements if they exist
+            const elements = {
+                'confirmed-name': data.name,
+                'confirmed-email': data.email,
+                'confirmed-motivation': data.motivation,
+                'confirmed-tier': data.tier,
+                'confirmed-description': data.description,
+                'confirmed-interest': data.interest,
+                'submission-time': data.submittedAt
+            };
+            
+            Object.entries(elements).forEach(([id, value]) => {
+                const element = document.getElementById(id);
+                if (element && value) {
+                    element.textContent = value;
+                }
+            });
+        }
+    });
+}

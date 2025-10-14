@@ -105,11 +105,14 @@ floatingElements.forEach((element, index) => {
 
 // Enhanced form submission handler
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('Form handler loaded'); // Added logging
     const form = document.getElementById('wrk-application-form') || document.querySelector('form');
     
     if (form) {
+        console.log('Form found, adding submit handler'); // Added logging
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+            console.log('Form submit intercepted'); // Added logging
             
             // Show loading state
             const submitButton = this.querySelector('input[type="submit"]') || this.querySelector('button[type="submit"]');
@@ -131,6 +134,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 urlEncodedData.append(key, value);
             }
             
+            console.log('Sending data to backend...'); // Added logging
+            
             // Submit to backend with proper headers
             fetch('https://wrkacademy-backend-production.up.railway.app/application', {
                 method: 'POST',
@@ -139,7 +144,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: urlEncodedData.toString()
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log('Response received:', response.status); // Added logging
+                return response.json();
+            })
             .then(result => {
                 console.log('Backend response:', result);
                 
@@ -156,8 +164,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
                 
                 localStorage.setItem('wrkSubmission', JSON.stringify(submissionData));
+                console.log('Data stored in localStorage'); // Added logging
                 
                 // Redirect to confirmation page
+                console.log('Redirecting to confirmation page...'); // Added logging
                 window.location.href = "/confirmation";
             })
             .catch(error => {
@@ -174,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('wrkSubmission', JSON.stringify(submissionData));
                 
                 // Redirect to confirmation page
+                console.log('Error occurred, still redirecting...'); // Added logging
                 window.location.href = "/confirmation";
             })
             .finally(() => {
@@ -186,16 +197,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 submitButton.disabled = false;
             });
         });
+    } else {
+        console.error('Form not found!'); // Added logging
     }
 });
 
 // Function to display confirmation data on confirmation page
 if (window.location.pathname.includes('confirmation')) {
     document.addEventListener('DOMContentLoaded', function() {
+        console.log('On confirmation page, loading data...'); // Added logging
         const submissionData = localStorage.getItem('wrkSubmission');
         
         if (submissionData) {
             const data = JSON.parse(submissionData);
+            console.log('Loaded submission data:', data); // Added logging
             
             // Update confirmation page elements if they exist
             const elements = {
@@ -214,6 +229,8 @@ if (window.location.pathname.includes('confirmation')) {
                     element.textContent = value;
                 }
             });
+        } else {
+            console.log('No submission data found'); // Added logging
         }
     });
 }

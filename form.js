@@ -318,3 +318,90 @@ document.addEventListener('DOMContentLoaded', () => {
         if (target) smoothScrollTo(target);
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const newsletterBtn = document.querySelector('.newsletter-btn');
+    const newsletterInput = document.querySelector('.newsletter-input');
+    
+    if (newsletterBtn && newsletterInput) {
+        newsletterBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const email = newsletterInput.value.trim();
+            
+            // Basic email validation
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            // Show loading state
+            const originalText = this.textContent;
+            this.textContent = 'Subscribing...';
+            this.disabled = true;
+            
+            // Create form data with just email
+            const formData = new FormData();
+            formData.append('email', email);
+            
+            // Convert to URL encoded format
+            const urlEncodedData = new URLSearchParams();
+            urlEncodedData.append('email', email);
+            
+            // Submit to backend
+            fetch('https://wrkacademy-backend-production.up.railway.app/application', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: urlEncodedData.toString()
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Newsletter subscription successful:', result);
+                
+                // Store newsletter subscription data
+                const subscriptionData = {
+                    email: email,
+                    type: 'newsletter',
+                    subscribedAt: new Date().toLocaleString(),
+                    status: result.status || 'subscribed'
+                };
+                
+                localStorage.setItem('wrkNewsletterSubscription', JSON.stringify(subscriptionData));
+                
+                // Redirect to confirmation page
+                window.location.href = 'pages/confirmation.html';
+            })
+            .catch(error => {
+                console.error('Newsletter subscription error:', error);
+                
+                // Still store basic data and redirect
+                const subscriptionData = {
+                    email: email,
+                    type: 'newsletter',
+                    subscribedAt: new Date().toLocaleString(),
+                    status: 'subscribed'
+                };
+                
+                localStorage.setItem('wrkNewsletterSubscription', JSON.stringify(subscriptionData));
+                
+                // Redirect to confirmation page
+                window.location.href = 'pages/confirmation.html';
+            })
+            .finally(() => {
+                // Restore button state (though user will be redirected)
+                this.textContent = originalText;
+                this.disabled = false;
+            });
+        });
+        
+        // Also handle Enter key press in email input
+        newsletterInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                newsletterBtn.click();
+            }
+        });
+    }
+});

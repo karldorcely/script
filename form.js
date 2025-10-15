@@ -371,7 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('wrkNewsletterSubscription', JSON.stringify(subscriptionData));
                 
                 // Redirect to confirmation page
-                window.location.href = 'pages/confirmation.html';
+                window.location.href = '/confirmation';
             })
             .catch(error => {
                 console.error('Newsletter subscription error:', error);

@@ -387,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('wrkNewsletterSubscription', JSON.stringify(subscriptionData));
                 
                 // Redirect to confirmation page
-                window.location.href = 'pages/confirmation.html';
+                window.location.href = '/confirmation';
             })
             .finally(() => {
                 // Restore button state (though user will be redirected)

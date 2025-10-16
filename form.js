@@ -58,10 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     block: 'start' 
                 });
                 
-                // Backup with custom smooth scroll
+                // Backup with custom smooth scroll (faster duration)
                 setTimeout(() => {
-                    smoothScrollTo(newsletter, 500);
-                }, 50);
+                    smoothScrollTo(newsletter, 300);
+                }, 30);
             }
         });
     } else {
@@ -72,23 +72,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // ========================================================================= //
 });
 
-// Enhanced smooth scrolling with smooth easing
-function smoothScrollTo(target, duration = 1000) {
+// Enhanced smooth scrolling with smooth easing (faster default)
+function smoothScrollTo(target, duration = 400) {
     const targetPosition = target.offsetTop - 50;
     const startPosition = window.pageYOffset;
     const distance = targetPosition - startPosition;
     let startTime = null;
 
-    // Smooth easing function (easeInOutCubic)
-    function easeInOutCubic(t) {
-        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    // Faster easing function (easeOutQuart - more responsive)
+    function easeOutQuart(t) {
+        return 1 - Math.pow(1 - t, 4);
     }
 
     function animation(currentTime) {
         if (startTime === null) startTime = currentTime;
         const timeElapsed = currentTime - startTime;
         const progress = Math.min(timeElapsed / duration, 1);
-        const easeProgress = easeInOutCubic(progress);
+        const easeProgress = easeOutQuart(progress);
         
         window.scrollTo(0, startPosition + (distance * easeProgress));
         
@@ -126,8 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Observe all sections for scroll animations (except hero which should be visible immediately)
     document.querySelectorAll('.content-section:not(#hero)').forEach(section => {
         section.style.opacity = '0';
-        section.style.transform = 'translateY(30px)';
-        section.style.transition = 'all 0.8s cubic-bezier(0.4, 0.0, 0.2, 1)';
+        section.style.transform = 'translateY(20px)';
+        section.style.transition = 'all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1)';
         observer.observe(section);
     });
 });

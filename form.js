@@ -35,6 +35,41 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error('Intro overlay not found!');
     }
+
+    // ========================================================================= //
+    // PULSE CARD SUBSCRIBE NOW SMOOTH SCROLLING FIX                            //
+    // ========================================================================= //
+    // Specific handler for pulse card "Subscribe Now" button
+    const pulseSubscribeBtn = document.querySelector('.pulse-card a[href="#newsletter"]');
+    if (pulseSubscribeBtn) {
+        console.log('✅ Found pulse card Subscribe Now button, adding smooth scroll');
+        
+        pulseSubscribeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const newsletter = document.getElementById('newsletter');
+            if (newsletter) {
+                console.log('Pulse Subscribe Now clicked, scrolling to newsletter');
+                
+                // Use proven scrollIntoView method
+                newsletter.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+                
+                // Backup with custom smooth scroll
+                setTimeout(() => {
+                    smoothScrollTo(newsletter, 500);
+                }, 50);
+            }
+        });
+    } else {
+        console.log('❌ Pulse card Subscribe Now button not found');
+    }
+    // ========================================================================= //
+    // END PULSE CARD SUBSCRIBE NOW FIX                                         //
+    // ========================================================================= //
 });
 
 // Enhanced smooth scrolling with smooth easing
